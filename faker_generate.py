@@ -86,7 +86,7 @@ def populate_database():
 
         # Generar estudiantes
         estudiantes = []
-        for _ in range(600):
+        for _ in range(60):
             nombre = fake.first_name()
             apellido = fake.last_name()
             fecha_nacimiento = fake.date_of_birth(minimum_age=6, maximum_age=18)

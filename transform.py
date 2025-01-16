@@ -75,14 +75,14 @@ def tra_loa_process():
 
         print("Transform: asistencia")
         asistencias_df = extract_data("SELECT * FROM sistema_notas.asistencias;", origin_conn)
-        hechos_asistencia = asistencias_df.groupby(["estudiante_id", "grado_id", "periodo_id"]).agg(
+        hechos_asistencia = asistencias_df.groupby(["estudiante_id", "grado_id", "periodo_id", "ano_id"]).agg(
             total_presentes=("presente", lambda x: (x == True).sum()),
             total_ausentes=("presente", lambda x: (x == False).sum())
         ).reset_index()
 
         print("Transform: rendimiento")
-        notas_df = extract_data("SELECT * FROM sistema_notas.notas;", origin_conn)
-        hechos_rendimiento = notas_df.groupby(["materia_id", "ano_id", "periodo_id"]).agg(
+        notas_df = extract_data("SELECT sn.*, sm.grado_id FROM sistema_notas.notas sn JOIN sistema_notas.materias sm ON sn.materia_id = sm.materia_id;", origin_conn)
+        hechos_rendimiento = notas_df.groupby(["materia_id", "ano_id", "periodo_id", "grado_id"]).agg(
             promedio_nota=("nota", "mean"),
             total_estudiantes=("estudiante_id", "count")
         ).reset_index()
